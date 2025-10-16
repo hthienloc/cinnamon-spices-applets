@@ -187,6 +187,7 @@ MyApplet.prototype = {
     },
 
     on_applet_clicked: function (event) {
+        this.enable_dark_mode = !this.enable_dark_mode;
         this.dark_mode_switch.setToggleState(this.enable_dark_mode);
         this.menu.toggle();
     },
