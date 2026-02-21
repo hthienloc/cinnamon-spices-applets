@@ -15,7 +15,9 @@ interface MpvStartArguments {
     /** in percent */
     volume: number,
     simulateLoading?: boolean,
-    cvcVolMax?: number
+    cvcVolMax?: number,
+    /** initial metadata title (default mocked constant) */
+    initialTitle?: string
 }
 
 type MprisPropertiesDeepUnpackedWriteable = {
@@ -156,6 +158,7 @@ export function initMprisMocks(args: Arguments) {
         const {
             url,
             volume,
+            title = EXAMPLE_TITLE_1,
             simulateLoading = true,
             cvcVolMax = 65536
         } = args
@@ -176,7 +179,7 @@ export function initMprisMocks(args: Arguments) {
             Volume: Variant.new_double(volume / 100),
             Metadata: new Variant('a{sv}', {
                 "mpris:trackid": Variant.new_string(trackId),
-                "xesam:title": Variant.new_string(EXAMPLE_TITLE_1),
+                "xesam:title": Variant.new_string(title),
                 "xesam:url": Variant.new_string(url),
             }),
             PlaybackStatus: Variant.new_string("Playing")
@@ -208,10 +211,10 @@ export function initMprisMocks(args: Arguments) {
         })
     }
 
-    function simulateTitleChanged() {
+    function simulateTitleChanged(newTitle?: string) {
         const propertyChange: Partial<MprisPropertiesPacked> = {
             Metadata: new Variant('a{sv}', {
-                'xesam:title': Variant.new_string(EXAMPLE_TITLE_1)
+                'xesam:title': Variant.new_string(newTitle || EXAMPLE_TITLE_1)
             })
         }
 
